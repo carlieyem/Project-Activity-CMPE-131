@@ -1,0 +1,7 @@
+python3 -m venv venv
+source venv/bin/activate
+< this gets you into your virtual environment >
+< so you can do pip3 install ...>
+
+deactivate
+< gets you out of the environment >
