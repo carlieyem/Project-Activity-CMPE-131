@@ -1,6 +1,20 @@
-from flask import render_template
-#from time import datetime
+from flask import render_template, redirect
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired
 from app import myapp_obj
+
+class HomeForm(FlaskForm):
+    submit = SubmitField('Login')
+    submit = SubmitField('Button2')
+    submit = SubmitField('Button3')
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Submit')
+
 
 @myapp_obj.route('/')
 # view functions
@@ -12,8 +26,9 @@ def hello():
 def member(name):
     return render_template('member.html', name=name)
 
-@myapp_obj.route('/home')
+@myapp_obj.route('/home', methods=['GET', 'POST'])
 def greeting():
+    form = HomeForm()
     daytimeGreeting = ['Hello!', 'Morning!', 'Afternoon!', 'Evening!', 'Night!']
     greetings = daytimeGreeting[3]
     ''''
@@ -26,11 +41,15 @@ def greeting():
     elif(datetime.now().hour <=24):
         greeting = daytimeGreeting[4] #night
     '''
-    
-    return render_template('home.html', Greeting=greetings)
+    if form.validate_on_submit('Login'):
+        return redirect('login')
+    return render_template('home.html', Greeting=greetings, form=form)
     
 @myapp_obj.route('/login')
 def login():
+    form = LoginForm()
     abc = {'name':'Carlie'}
-    return render_template('login.html', users=abc)
+    if form.validate_on_submit('Submit'):
+        return redirect('/members/' + abc)
+    return render_template('login.html', users=abc, form=form)
 
