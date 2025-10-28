@@ -10,7 +10,7 @@ def hello():
 # http://127.0.0.1:5000/members/Carlie/
 @myapp_obj.route('/members/<string:name>/')
 def member(name):
-    return name
+    return render_template('member.html', name=name)
 
 @myapp_obj.route('/home')
 def greeting():
